@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, RequestHandler, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
 
@@ -14,11 +14,13 @@ const bodyValidation: yup.Schema <Cidade> = yup.object().shape({
 
 });
 
-export const create = async (req: Request<{}, {}, Cidade>, res: Response) => {
-let validatedData: Cidade |  undefined = undefined;
+// Isso aqui é um middleware, ele é chamado antes do create e validará o corpo da
+//  requisição antes de "liberar" o create para ser executado.
 
+export const createBodyValidator: RequestHandler = async ( req, res, next) => {
     try{
-        validatedData = await bodyValidation.validate(req.body, {abortEarly: false});
+        await bodyValidation.validate(req.body, {abortEarly: false});
+        return next();
     }
     catch (err) {
 
@@ -32,7 +34,15 @@ let validatedData: Cidade |  undefined = undefined;
         
         return res.status(StatusCodes.BAD_REQUEST).json({errors});
     }
-  console.log(validatedData);
+};
+
+// Já aqui é o create em si, ele só será executado se o createBodyValidator obtiver sucesso no seu 'try'
+//  e chamar o 'next()'; Ou seja, no meu arquivo de rotas, na minha rota '/cidades', terei o createBodyValidator
+//  como um middleware, e então o create como handler da rota.
+
+export const create: RequestHandler = async (req: Request<{}, {}, Cidade>, res: Response) => {
+
+  console.log(req.body);
 
   return res.send('Criado!');
-}
+};
