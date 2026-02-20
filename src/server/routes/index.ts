@@ -7,6 +7,8 @@ router.get('/', (_, res) => {
   return res.send({ message: 'Funcionando' });
 });
 
-router.post('/cidades', cidadesController.createBodyValidator, cidadesController.create);
+router.post('/cidades',
+   cidadesController.createValidation,
+   cidadesController.create);
 
 export { router };
