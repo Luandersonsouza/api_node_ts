@@ -21,7 +21,14 @@ export const  validation: tValidation = (getAllSchemas) => async (req, res, next
     Object.entries(schemas).forEach(([key, schema]) => {
 
         try{
-            schema.validateSync(req[key as tProperty], {abortEarly: false});
+            const validateData = schema.validateSync(
+                req[key as tProperty],
+                {
+                    abortEarly: false,
+                    stripUnknown: true,
+                }
+            );
+            req[key as tProperty] = validateData;
         }
         catch (err) {
     
@@ -35,7 +42,6 @@ export const  validation: tValidation = (getAllSchemas) => async (req, res, next
 
             errosResult[key] = errors;
             
-        
         }
 
     });
@@ -45,7 +51,4 @@ export const  validation: tValidation = (getAllSchemas) => async (req, res, next
     } else{
         return res.status(StatusCodes.BAD_REQUEST).json({errors: errosResult});
     }
-
-    
-
 }
