@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
     "start": "ts-node-dev ./src/index.ts"
@@ -13,22 +13,27 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@eslint/js": "^9.39.3",
     "@types/express": "^5.0.6",
     "@types/http-status-codes": "^1.2.0",
+    "@types/supertest": "^7.2.0",
+    "supertest": "^7.2.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.56.1"
   },
   "dependencies": {
     "@eslint/css": "^0.14.1",
-    "@eslint/js": "^10.0.1",
     "@eslint/json": "^1.0.1",
     "@eslint/markdown": "^7.5.1",
+    "@types/jest": "^30.0.0",
     "@types/yup": "^0.29.14",
     "dotenv": "^17.3.1",
     "eslint": "^9.39.2",
     "express": "^5.2.1",
     "globals": "^17.3.0",
-    "typescript-eslint": "^8.55.0",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.6",
     "yup": "^1.7.1"
   }
 }
