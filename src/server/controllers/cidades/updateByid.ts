@@ -31,7 +31,19 @@ export const updateByid = async (
     res: Response
 ) => { 
     const id = Number(req.params.id);
+
+    const cidadeMock : Record<number, object> = {
+        1: {id: 1, nome: 'Maceio'},
+        2: {id: 2, nome: 'Recife'},
+    };
+
+    const cidade = cidadeMock[id];
+
+    if (!cidade) {
+        return res.status(StatusCodes.NOT_FOUND).json({
+            errors: { default: 'Registro não encontrado.'}
+        });
+    }
     
-    console.log(req.params, req.body);
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Não implementado');
+    return res.status(StatusCodes.OK).json({ ...cidade, nome: req.body.nome });
 };

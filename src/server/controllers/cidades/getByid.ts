@@ -3,6 +3,7 @@ import * as yup from 'yup';
 import { validation } from '../../shared/middlewares';
 import { StatusCodes } from 'http-status-codes';
 
+
 const paramsSchema = yup.object().shape({
     id: yup
     .number()
@@ -22,6 +23,17 @@ export const getByid = async (
     res: Response
 ) => {
     const id = Number(req.params.id); 
-    console.log(req.params);
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Não implementado');
+    
+    const cidadeMock: Record<number, object> = {
+        1: { id: 1, nome: 'Maceio' },
+        2: { id: 2, nome: 'Recife' },
+        3: { id: 3, nome: 'Salvador' },
+    };
+
+    const cidade = cidadeMock[id];
+
+    if (!cidade) {
+        return res.status(StatusCodes.NOT_FOUND).send('Cidade não encontrada');
+    }
+    return res.status(StatusCodes.OK).json(cidade);
 };
