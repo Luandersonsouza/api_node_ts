@@ -20,31 +20,24 @@ export const  validation: tValidation = (getAllSchemas) => async (req, res, next
 
     Object.entries(schemas).forEach(([key, schema]) => {
 
-        try{
-            const validateData = schema.validateSync(
-                req[key as tProperty],
-                {
-                    abortEarly: false,
-                    stripUnknown: true,
-                }
-            );
-            req[key as tProperty] = validateData;
-        }
-        catch (err) {
-    
+       try {
+        const original = req[key as tProperty];
+
+        const data = original && typeof original === 'object' ? {...original} : original;
+
+        schema.validateSync(data, {abortEarly: false});
+       }
+         catch (err) {
+
             const yupError = err as ValidationError;
             const errors: Record<string, string> = {};
-    
-            yupError.inner.forEach(error => {
-                if (error.path === undefined) return;
-                errors[error.path] = error.message;
+            yupError.inner.forEach( error => {
+                if (error.path) errors[error.path] = error.message;
+                });
+            errosResult[key] = errors;
+            }
             });
 
-            errosResult[key] = errors;
-            
-        }
-
-    });
 
     if (Object.entries(errosResult).length === 0) {
         return next();
