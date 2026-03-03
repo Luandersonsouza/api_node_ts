@@ -14,12 +14,9 @@ const querySchema = yup.object().shape({
 type QueryProps = yup.InferType<typeof querySchema>;
 
 export const getAllValidation = validation((getSchema) => {
-
     return {
         query: getSchema<QueryProps>(querySchema),
     };
-
-    
 });
 
 export const getAll = async (
@@ -27,5 +24,15 @@ export const getAll = async (
     res: Response
 ) => {
 
-  return res.status(StatusCodes.OK).json([]);
+    res.setHeader('access-control-expose-headers', 'x-total-count');
+    res.setHeader('x-total-count', 1);
+
+    return res.status(StatusCodes.OK).json([
+
+        {
+            id: 1,
+            nome: 'Maceio',
+        }
+
+  ]);
 };
