@@ -22,18 +22,17 @@ export const getByid = async (
     req: Request<{id: string}>,
     res: Response
 ) => {
-    const id = Number(req.params.id); 
-    
-    const cidadeMock: Record<number, object> = {
-        1: { id: 1, nome: 'Maceio' },
-        2: { id: 2, nome: 'Recife' },
-        3: { id: 3, nome: 'Salvador' },
-    };
 
-    const cidade = cidadeMock[id];
+    //teste para simular dados mockados
+    if(Number(req.params.id) === 9999)
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            errors: {
+                default: 'Registro não encontrado'
+            }
+        });
+    return res.status(StatusCodes.OK).json({
 
-    if (!cidade) {
-        return res.status(StatusCodes.NOT_FOUND).send('Cidade não encontrada');
-    }
-    return res.status(StatusCodes.OK).json(cidade);
+        id: Number(req.params.id),
+        nome: 'Maceio',
+    });
 };
